@@ -1,4 +1,3 @@
-
 <style>
 :root {
   --pri: #0f4c81;
@@ -24,13 +23,14 @@ body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); co
 .panel-title { font-size: .95rem; font-weight: 700; color: var(--pri); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
 .panel-title span { background: var(--accent); padding: 2px 10px; border-radius: 20px; font-size: .8rem; color: var(--sec); }
 
+.grid4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 14px; }
 .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
 .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
 .field { display: flex; flex-direction: column; gap: 5px; }
 label { font-size: .82rem; font-weight: 600; color: #475569; }
-input[type=number] { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; background: #fff; transition: border .15s, box-shadow .15s; }
-input[type=number]:focus { outline: none; border-color: var(--sec); box-shadow: 0 0 0 3px rgba(29,125,216,.15); }
-input.err { border-color: var(--red) !important; background: var(--red-bg); }
+input[type=number], select { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; background: #fff; transition: border .15s, box-shadow .15s; }
+input[type=number]:focus, select:focus { outline: none; border-color: var(--sec); box-shadow: 0 0 0 3px rgba(29,125,216,.15); }
+input.err, select.err { border-color: var(--red) !important; background: var(--red-bg); }
 .hint { font-size: .75rem; color: #94a3b8; }
 
 .actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
@@ -49,7 +49,7 @@ button { padding: 10px 20px; border-radius: 8px; font-size: .9rem; font-weight: 
 .comp-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
 .comp-row { display: flex; justify-content: space-between; align-items: center; font-size: .85rem; }
 .comp-row .lbl { color: #64748b; }
-.comp-row .val { font-weight: 700; color: var(--pri); font-size: 1.05rem; }
+.comp-row .val { font-weight: 700; color: var(--pri); font-size: 1.05rem; text-align: right;}
 .comp-row .val.zero { color: #94a3b8; font-weight: 400; }
 .comp-row .val.flag { color: var(--red); }
 .comp-note { font-size: .76rem; color: #64748b; background: #f8fafc; padding: 6px 10px; border-radius: 6px; border-left: 3px solid #e2e8f0; line-height: 1.5; }
@@ -104,41 +104,60 @@ td.zero { color: #94a3b8; text-align: right; }
     </div>
 
     <div class="panel-title" style="margin-top:18px;">Existing Facilities <span>Step 2 of 2</span></div>
-    <div class="grid3">
+    
+    <div class="grid4">
       <div class="field">
-        <label>Existing RO Systems</label>
-        <input type="number" id="ro_ex" min="0" placeholder="e.g. 1">
-        <div class="hint">Phase I/II supplied (functional or not)</div>
+        <label>RO Available?</label>
+        <select id="ro_avail">
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+        <div class="hint">Functional RO in campus</div>
+      </div>
+      <div class="field">
+        <label>RO Indented in Phase-II?</label>
+        <select id="ro_ph2">
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+        <div class="hint">Already covered in Phase-2</div>
       </div>
       <div class="field">
         <label>Existing Usable Dual Desks</label>
         <input type="number" id="dd_ex" min="0" placeholder="e.g. 40">
-        <div class="hint">Desks currently in use (pairs)</div>
+        <div class="hint">Desks currently in use</div>
+      </div>
+      <div class="field">
+        <label>Dual Desks Indented (Phase-2)</label>
+        <input type="number" id="dd_ph2" min="0" placeholder="e.g. 10">
+        <div class="hint">Indented in MBMB Phase-2</div>
+      </div>
+    </div>
+    
+    <div class="grid4" style="margin-top:14px;">
+      <div class="field">
+        <label>Drinking Water Points</label>
+        <input type="number" id="dw_ex" min="0" placeholder="e.g. 1">
+        <div class="hint">Existing taps / points</div>
       </div>
       <div class="field">
         <label>Existing Green Chalk Boards</label>
         <input type="number" id="gcb_ex" min="0" placeholder="e.g. 3">
         <div class="hint">Usable boards in classrooms</div>
       </div>
-    </div>
-    <div class="grid3" style="margin-top:14px;">
       <div class="field">
         <label>Toilets Existing (Boys + Girls)</label>
         <input type="number" id="toi_ex" min="0" placeholder="e.g. 2">
         <div class="hint">Functional toilet blocks</div>
       </div>
       <div class="field">
-        <label>Drinking Water Points Existing</label>
-        <input type="number" id="dw_ex" min="0" placeholder="e.g. 1">
-        <div class="hint">Taps / points available</div>
-      </div>
-      <div class="field">
-        <label>Electrified Rooms (with fans/lights)</label>
+        <label>Electrified Rooms</label>
         <input type="number" id="el_ex" min="0" placeholder="e.g. 2">
-        <div class="hint">Rooms with functioning electrification</div>
+        <div class="hint">Rooms with fans/lights</div>
       </div>
     </div>
-    <div class="grid2" style="margin-top:14px;">
+    
+    <div class="grid3" style="margin-top:14px;">
       <div class="field">
         <label>Verandah Length Available (metres)</label>
         <input type="number" id="ver_m" min="0" placeholder="e.g. 20">
@@ -148,6 +167,14 @@ td.zero { color: #94a3b8; text-align: right; }
         <label>Rooms Needing Major/Minor Repair</label>
         <input type="number" id="rep_need" min="0" placeholder="e.g. 2">
         <div class="hint">Based on physical inspection</div>
+      </div>
+      <div class="field">
+        <label>Painting Indented (Phase-2)?</label>
+        <select id="paint_ph2">
+          <option value="No">No</option>
+          <option value="Yes">Yes</option>
+        </select>
+        <div class="hint">Already covered in Phase-2</div>
       </div>
     </div>
 
@@ -191,8 +218,12 @@ function v(id) { return parseInt(g(id).value) || 0; }
 function vRaw(id) { return g(id).value.trim(); }
 
 function resetAll() {
-  ['s','e','o','ro_ex','dd_ex','gcb_ex','toi_ex','dw_ex','el_ex','ver_m','rep_need'].forEach(id => {
-    g(id).value = '';
+  ['s','e','o','ro_avail','ro_ph2','dd_ex','dd_ph2','gcb_ex','toi_ex','dw_ex','el_ex','ver_m','rep_need','paint_ph2'].forEach(id => {
+    if(g(id).tagName === 'SELECT') {
+      g(id).value = 'No';
+    } else {
+      g(id).value = '';
+    }
     g(id).classList.remove('err');
   });
   g('err-banner').style.display = 'none';
@@ -202,7 +233,7 @@ function resetAll() {
 }
 
 function calc() {
-  ['s','e','o','ro_ex','dd_ex','gcb_ex','toi_ex','dw_ex','el_ex','ver_m','rep_need'].forEach(id => g(id).classList.remove('err'));
+  ['s','e','o','dd_ex','dd_ph2','gcb_ex','toi_ex','dw_ex','el_ex','ver_m','rep_need'].forEach(id => g(id).classList.remove('err'));
   g('err-banner').style.display = 'none';
 
   let errs = [];
@@ -219,8 +250,14 @@ function calc() {
   const s = v('s');
   const e = v('e');
   const o = v('o');
-  const ro_ex = v('ro_ex');
+  
+  const ro_avail = g('ro_avail').value;
+  const ro_ph2 = g('ro_ph2').value;
+  const paint_ph2 = g('paint_ph2').value;
+  
   const dd_ex = v('dd_ex');
+  const dd_ph2 = v('dd_ph2');
+  
   const gcb_ex = v('gcb_ex');
   const toi_ex = v('toi_ex');
   const dw_ex = v('dw_ex');
@@ -270,17 +307,14 @@ function calc() {
   const ver_possible = Math.floor(ver_m / 6);
   const ver_final = Math.min(ver_conv, ver_possible);
 
-  // Total rooms after all work
   const total_rooms_after = total + acr + part + ver_final;
 
-  // 2. RO Systems: 1 per 60 students (approx)
-  const ro_req = Math.ceil(s / 60);
-  const ro_net = Math.max(0, ro_req - ro_ex);
+  // 2. RO Systems: If neither available nor indented, require 1
+  const ro_net = (ro_avail === 'No' && ro_ph2 === 'No') ? 1 : 0;
 
-  // 3. Dual Desks: 1 desk per 2 students, deduct existing desks and rooms*seats
+  // 3. Dual Desks: 1 desk per 2 students, deduct existing desks and Phase 2 indents
   const dd_req = Math.ceil(s / 2);
-  const dd_room_covered = total_rooms_after * 20; // assume 20 desks per room already from procurement
-  const dd_net = Math.max(0, dd_req - dd_ex);
+  const dd_net = Math.max(0, dd_req - dd_ex - dd_ph2);
 
   // 4. Green Chalk Boards: 1 per functional classroom
   const gcb_req = total_rooms_after;
@@ -290,7 +324,7 @@ function calc() {
   const toi_req = s > 0 ? Math.max(2, Math.ceil(s / 50)) : 0;
   const toi_net = Math.max(0, toi_req - toi_ex);
 
-  // 6. Drinking Water: 1 point per 60 students
+  // 6. Drinking Water Points: 1 point per 60 students
   const dw_req = s > 0 ? Math.max(1, Math.ceil(s / 60)) : 0;
   const dw_net = Math.max(0, dw_req - dw_ex);
 
@@ -301,8 +335,9 @@ function calc() {
   // 8. Major/Minor Repair
   const rep_net = rep_need;
 
-  // 9. Painting: whole school (binary — yes/no per school)
-  const paint = s > 0 ? 1 : 0;
+  // 9. Painting: whole school, required if not already indented in Phase-II
+  const paint_req = s > 0 ? 1 : 0;
+  const paint_net = (paint_req === 1 && paint_ph2 === 'No') ? 1 : 0;
 
   // --- RENDER SUMMARY ---
   const summaryData = [
@@ -329,7 +364,7 @@ function calc() {
         { lbl: 'Rooms needing repair', val: rep_need },
         { lbl: 'Net requirement', val: rep_net },
       ],
-      note: rep_net > 0 ? `${rep_net} room(s) to be proposed after physical inspection & Mandal Committee verification.` : 'No repair works proposed.',
+      note: rep_net > 0 ? `${rep_net} room(s) to be proposed after physical inspection.` : 'No repair works proposed.',
       warn: rep_net > 0
     },
     {
@@ -373,20 +408,21 @@ function calc() {
     {
       num: 6, title: 'Painting Works', agency: 'APEWIDC',
       rows: [
-        { lbl: 'School to be painted', val: paint === 1 ? 'Yes' : 'N/A' },
+        { lbl: 'School requires painting', val: paint_req === 1 ? 'Yes' : 'No' },
+        { lbl: 'Indented in Phase-II', val: paint_ph2 },
+        { lbl: 'Net painting required', val: paint_net === 1 ? 'Yes' : 'No' },
       ],
-      note: paint ? 'Entire school building to be proposed for painting.' : 'No students enrolled.',
-      warn: false
+      note: paint_net === 1 ? 'Entire school building to be proposed for painting.' : (paint_ph2 === 'Yes' ? 'Painting already covered in Phase-II.' : 'No students enrolled.'),
+      warn: paint_net === 1
     },
     {
-      num: 7, title: 'Drinking Water Facilities', agency: 'APEWIDC',
+      num: 7, title: 'Drinking Water & RO Facilities', agency: 'APEWIDC',
       rows: [
-        { lbl: 'Required water points', val: dw_req },
-        { lbl: 'Existing water points', val: dw_ex },
-        { lbl: 'Net points needed', val: dw_net },
+        { lbl: 'Net tap points needed', val: dw_net },
+        { lbl: 'RO System requirement', val: ro_net },
       ],
-      note: dw_net > 0 ? `${dw_net} additional drinking water point(s) / RO unit(s) required.` : 'Drinking water requirement met.',
-      warn: dw_net > 0
+      note: (dw_net > 0 || ro_net > 0) ? `${dw_net} additional tap point(s) and ${ro_net} RO unit(s) required.` : 'Drinking water requirement met.',
+      warn: (dw_net > 0 || ro_net > 0)
     },
     {
       num: 8, title: 'Green Chalk Boards', agency: 'APEWIDC',
@@ -403,9 +439,10 @@ function calc() {
       rows: [
         { lbl: 'Desks required (strength/2)', val: dd_req },
         { lbl: 'Existing usable desks', val: dd_ex },
+        { lbl: 'Indented in Phase-II', val: dd_ph2 },
         { lbl: 'Net desks to procure', val: dd_net },
       ],
-      note: dd_net > 0 ? `${dd_net} dual desk(s) to be proposed (1 desk per 2 students).` : 'Dual desk requirement met.',
+      note: dd_net > 0 ? `${dd_net} dual desk(s) to be proposed.` : 'Dual desk requirement met.',
       warn: dd_net > 0
     },
     {
@@ -425,7 +462,7 @@ function calc() {
   let compHTML = '';
   comps.forEach(c => {
     let rowsHTML = c.rows.map(r => {
-      const isZero = r.val === 0 || r.val === 'N/A';
+      const isZero = r.val === 0 || r.val === 'N/A' || r.val === 'No';
       return `<div class="comp-row"><span class="lbl">${r.lbl}</span><span class="val${isZero ? ' zero' : c.warn && r.lbl.toLowerCase().includes('net') ? ' flag' : ''}">${r.val}</span></div>`;
     }).join('');
     compHTML += `<div class="comp-card">
@@ -438,21 +475,21 @@ function calc() {
 
   // --- RENDER TABLE ---
   const tableRows = [
-    { sl:1, name:'Major & Minor Repairs',             req: rep_need, ex: 0,      net: rep_net, agency:'SMC' },
-    { sl:2, name:'Verandah → Classroom Conversion',   req: ver_conv, ex: 0,      net: ver_final, agency:'SMC' },
+    { sl:1, name:'Major & Minor Repairs',              req: rep_need, ex: 0,       net: rep_net, agency:'SMC' },
+    { sl:2, name:'Verandah → Classroom Conversion',   req: ver_conv, ex: 0,       net: ver_final, agency:'SMC' },
     { sl:3, name:'Electrification (Fans & Lights)',   req: el_req,   ex: el_ex,  net: el_net, agency:'SMC' },
     { sl:4, name:'Toilets with Running Water',        req: toi_req,  ex: toi_ex, net: toi_net, agency:'SMC' },
     { sl:5, name:'Classroom Partitions',              req: part,     ex: 0,      net: part, agency:'APEWIDC' },
-    { sl:6, name:'Painting Works',                    req: paint,    ex: 0,      net: paint, agency:'APEWIDC' },
-    { sl:7, name:'Drinking Water Facilities',         req: dw_req,   ex: dw_ex,  net: dw_net, agency:'APEWIDC' },
+    { sl:6, name:'Painting Works',                    req: paint_req, ex: (paint_ph2 === 'Yes' ? 1 : 0), net: paint_net, agency:'APEWIDC' },
+    { sl:7, name:'Drinking Water (Taps & RO)',        req: `${dw_req} Taps`,   ex: `${dw_ex} Taps`,  net: `${dw_net} Taps, ${ro_net} RO`, agency:'APEWIDC' },
     { sl:8, name:'Green Chalk Boards',                req: gcb_req,  ex: gcb_ex, net: gcb_net, agency:'APEWIDC' },
-    { sl:9, name:'Dual Desks',                        req: dd_req,   ex: dd_ex,  net: dd_net, agency:'APEWIDC' },
+    { sl:9, name:'Dual Desks',                        req: dd_req,   ex: (dd_ex + dd_ph2),  net: dd_net, agency:'APEWIDC' },
     { sl:10,name:'Additional Class Rooms (ACRs)',     req: req_rooms,ex: total,  net: acr, agency:'Collector' },
   ];
 
   let tHTML = '';
   tableRows.forEach(r => {
-    const nc = r.net > 0 ? 'num' : 'zero';
+    const nc = (r.net > 0 || (typeof r.net === 'string' && r.net.includes('1'))) ? 'num' : 'zero';
     const ab = r.agency === 'SMC' ? 'badge-smc' : r.agency === 'APEWIDC' ? 'badge-ap' : 'badge-col';
     tHTML += `<tr>
       <td>${r.sl}</td>

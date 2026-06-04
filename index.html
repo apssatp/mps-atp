@@ -1,0 +1,469 @@
+
+<style>
+:root {
+  --pri: #0f4c81;
+  --sec: #1d7dd8;
+  --bg: #f4f7fb;
+  --card: #ffffff;
+  --txt: #334155;
+  --border: #cbd5e1;
+  --accent: #eef6ff;
+  --red: #ef4444;
+  --red-bg: #fef2f2;
+  --green: #16a34a;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); color: var(--txt); font-size: 14px; }
+.wrap { max-width: 1020px; margin: 0 auto; padding: 16px; display: flex; flex-direction: column; gap: 16px; }
+
+.hdr { background: linear-gradient(135deg, #0f4c81, #1d7dd8); color: #fff; padding: 20px 24px; border-radius: 14px; }
+.hdr h1 { font-size: 1.25rem; font-weight: 700; letter-spacing: .3px; }
+.hdr p { font-size: .85rem; opacity: .85; margin-top: 4px; }
+
+.panel { background: var(--card); border-radius: 12px; padding: 20px 22px; border: 1px solid rgba(0,0,0,.06); box-shadow: 0 2px 8px rgba(0,0,0,.04); }
+.panel-title { font-size: .95rem; font-weight: 700; color: var(--pri); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.panel-title span { background: var(--accent); padding: 2px 10px; border-radius: 20px; font-size: .8rem; color: var(--sec); }
+
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 14px; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+.field { display: flex; flex-direction: column; gap: 5px; }
+label { font-size: .82rem; font-weight: 600; color: #475569; }
+input[type=number] { width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; background: #fff; transition: border .15s, box-shadow .15s; }
+input[type=number]:focus { outline: none; border-color: var(--sec); box-shadow: 0 0 0 3px rgba(29,125,216,.15); }
+input.err { border-color: var(--red) !important; background: var(--red-bg); }
+.hint { font-size: .75rem; color: #94a3b8; }
+
+.actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 16px; }
+button { padding: 10px 20px; border-radius: 8px; font-size: .9rem; font-weight: 600; cursor: pointer; border: none; transition: all .15s; flex: 1; min-width: 120px; }
+.btn-pri { background: var(--pri); color: #fff; }
+.btn-pri:hover { background: var(--sec); }
+.btn-sec { background: #64748b; color: #fff; }
+.btn-sec:hover { background: #475569; }
+.btn-out { background: transparent; border: 1.5px solid var(--pri); color: var(--pri); }
+.btn-out:hover { background: var(--accent); }
+
+.comp-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+.comp-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; }
+.comp-head { padding: 10px 14px; background: #f8fafc; border-bottom: 1px solid var(--border); font-weight: 700; font-size: .85rem; color: var(--pri); display: flex; justify-content: space-between; align-items: center; }
+.comp-head .agency { font-size: .72rem; font-weight: 400; color: #64748b; background: #e2e8f0; padding: 2px 8px; border-radius: 10px; }
+.comp-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; }
+.comp-row { display: flex; justify-content: space-between; align-items: center; font-size: .85rem; }
+.comp-row .lbl { color: #64748b; }
+.comp-row .val { font-weight: 700; color: var(--pri); font-size: 1.05rem; }
+.comp-row .val.zero { color: #94a3b8; font-weight: 400; }
+.comp-row .val.flag { color: var(--red); }
+.comp-note { font-size: .76rem; color: #64748b; background: #f8fafc; padding: 6px 10px; border-radius: 6px; border-left: 3px solid #e2e8f0; line-height: 1.5; }
+.comp-note.warn { border-left-color: #f59e0b; background: #fffbeb; }
+.comp-note.good { border-left-color: var(--green); background: #f0fdf4; }
+
+.summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+.stat { background: var(--accent); border: 1px solid #dbeafe; border-radius: 10px; padding: 14px; text-align: center; }
+.stat .s-lbl { font-size: .75rem; font-weight: 600; color: #64748b; text-transform: uppercase; letter-spacing: .5px; margin-bottom: 6px; }
+.stat .s-val { font-size: 1.8rem; font-weight: 700; color: var(--pri); }
+.stat.flag { border-color: var(--red); background: var(--red-bg); }
+.stat.flag .s-val { color: var(--red); }
+
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid var(--border); font-size: .85rem; }
+th { background: #f8fafc; font-weight: 600; color: #475569; }
+td.num { font-weight: 700; color: var(--pri); text-align: right; }
+td.zero { color: #94a3b8; text-align: right; }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: .72rem; font-weight: 600; }
+.badge-smc { background: #dbeafe; color: #1e40af; }
+.badge-ap { background: #dcfce7; color: #166534; }
+.badge-col { background: #fef3c7; color: #92400e; }
+
+.err-banner { background: var(--red-bg); border: 1px solid #fca5a5; color: #b91c1c; padding: 10px 14px; border-radius: 8px; font-size: .85rem; font-weight: 600; }
+.footer { text-align: center; font-size: .78rem; color: #94a3b8; padding: 4px 0 10px; }
+</style>
+
+<div class="wrap">
+  <div class="hdr">
+    <h1>Mana Badi Mana Bhavishyathu — Infrastructure Estimator</h1>
+    <p>RC.No.3263710/MBMB/2026 · All 10 Components · Samagra Shiksha AP</p>
+  </div>
+
+  <div class="panel">
+    <div class="panel-title">School Details <span>Step 1 of 2</span></div>
+    <div class="grid3">
+      <div class="field">
+        <label>Student Enrollment</label>
+        <input type="number" id="s" min="0" placeholder="e.g. 120">
+        <div class="hint">Current academic year strength</div>
+      </div>
+      <div class="field">
+        <label>Existing Classrooms / Rooms</label>
+        <input type="number" id="e" min="0" placeholder="e.g. 3">
+        <div class="hint">Functional rooms available</div>
+      </div>
+      <div class="field">
+        <label>Ongoing ACRs (already sanctioned)</label>
+        <input type="number" id="o" min="0" placeholder="e.g. 1">
+        <div class="hint">Incomplete works under any scheme</div>
+      </div>
+    </div>
+
+    <div class="panel-title" style="margin-top:18px;">Existing Facilities <span>Step 2 of 2</span></div>
+    <div class="grid3">
+      <div class="field">
+        <label>Existing RO Systems</label>
+        <input type="number" id="ro_ex" min="0" placeholder="e.g. 1">
+        <div class="hint">Phase I/II supplied (functional or not)</div>
+      </div>
+      <div class="field">
+        <label>Existing Usable Dual Desks</label>
+        <input type="number" id="dd_ex" min="0" placeholder="e.g. 40">
+        <div class="hint">Desks currently in use (pairs)</div>
+      </div>
+      <div class="field">
+        <label>Existing Green Chalk Boards</label>
+        <input type="number" id="gcb_ex" min="0" placeholder="e.g. 3">
+        <div class="hint">Usable boards in classrooms</div>
+      </div>
+    </div>
+    <div class="grid3" style="margin-top:14px;">
+      <div class="field">
+        <label>Toilets Existing (Boys + Girls)</label>
+        <input type="number" id="toi_ex" min="0" placeholder="e.g. 2">
+        <div class="hint">Functional toilet blocks</div>
+      </div>
+      <div class="field">
+        <label>Drinking Water Points Existing</label>
+        <input type="number" id="dw_ex" min="0" placeholder="e.g. 1">
+        <div class="hint">Taps / points available</div>
+      </div>
+      <div class="field">
+        <label>Electrified Rooms (with fans/lights)</label>
+        <input type="number" id="el_ex" min="0" placeholder="e.g. 2">
+        <div class="hint">Rooms with functioning electrification</div>
+      </div>
+    </div>
+    <div class="grid2" style="margin-top:14px;">
+      <div class="field">
+        <label>Verandah Length Available (metres)</label>
+        <input type="number" id="ver_m" min="0" placeholder="e.g. 20">
+        <div class="hint">Convertible to classrooms (~6m per room)</div>
+      </div>
+      <div class="field">
+        <label>Rooms Needing Major/Minor Repair</label>
+        <input type="number" id="rep_need" min="0" placeholder="e.g. 2">
+        <div class="hint">Based on physical inspection</div>
+      </div>
+    </div>
+
+    <div id="err-banner" class="err-banner" style="display:none;margin-top:12px;"></div>
+    <div class="actions">
+      <button class="btn-pri" onclick="calc()">Calculate All 10 Components</button>
+      <button class="btn-out" onclick="resetAll()">Clear</button>
+      <button class="btn-sec" onclick="window.print()">Print Report</button>
+    </div>
+  </div>
+
+  <div class="panel" id="summary-panel" style="display:none;">
+    <div class="panel-title">Summary — Infrastructure Requirements</div>
+    <div class="summary-grid" id="summary-grid"></div>
+  </div>
+
+  <div class="panel" id="comp-panel" style="display:none;">
+    <div class="panel-title">Component-wise Estimates</div>
+    <div class="comp-grid" id="comp-grid"></div>
+  </div>
+
+  <div class="panel" id="table-panel" style="display:none;">
+    <div class="panel-title">Consolidated Estimate Table (for STMS Upload)</div>
+    <table id="est-table">
+      <thead><tr>
+        <th>Sl.</th><th>Infrastructure Component</th>
+        <th>Requirement</th><th>Existing</th>
+        <th style="text-align:right">Net Required</th>
+        <th>Agency</th>
+      </tr></thead>
+      <tbody id="est-tbody"></tbody>
+    </table>
+  </div>
+
+  <div class="footer">Based on Commissioner Proceedings RC.No.3263710/MBMB/2026, dated 27-05-2026 & 03-06-2026</div>
+</div>
+
+<script>
+function g(id) { return document.getElementById(id); }
+function v(id) { return parseInt(g(id).value) || 0; }
+function vRaw(id) { return g(id).value.trim(); }
+
+function resetAll() {
+  ['s','e','o','ro_ex','dd_ex','gcb_ex','toi_ex','dw_ex','el_ex','ver_m','rep_need'].forEach(id => {
+    g(id).value = '';
+    g(id).classList.remove('err');
+  });
+  g('err-banner').style.display = 'none';
+  g('summary-panel').style.display = 'none';
+  g('comp-panel').style.display = 'none';
+  g('table-panel').style.display = 'none';
+}
+
+function calc() {
+  ['s','e','o','ro_ex','dd_ex','gcb_ex','toi_ex','dw_ex','el_ex','ver_m','rep_need'].forEach(id => g(id).classList.remove('err'));
+  g('err-banner').style.display = 'none';
+
+  let errs = [];
+  if (vRaw('s') === '') { g('s').classList.add('err'); errs.push('Student Enrollment'); }
+  if (vRaw('e') === '') { g('e').classList.add('err'); errs.push('Existing Rooms'); }
+  if (vRaw('o') === '') { g('o').classList.add('err'); errs.push('Ongoing ACRs'); }
+
+  if (errs.length) {
+    g('err-banner').style.display = 'block';
+    g('err-banner').textContent = 'Please fill mandatory fields: ' + errs.join(', ');
+    return;
+  }
+
+  const s = v('s');
+  const e = v('e');
+  const o = v('o');
+  const ro_ex = v('ro_ex');
+  const dd_ex = v('dd_ex');
+  const gcb_ex = v('gcb_ex');
+  const toi_ex = v('toi_ex');
+  const dw_ex = v('dw_ex');
+  const el_ex = v('el_ex');
+  const ver_m = v('ver_m');
+  const rep_need = v('rep_need');
+
+  const total = e + o;
+
+  // 1. ACR / Partitions / Verandah — from guidelines table
+  let cat = '-', req_rooms = 0, acr = 0, part = 0, ver_conv = 0;
+
+  if (s > 0 && s < 60) {
+    cat = 'Below 60'; req_rooms = total; acr = 0; part = 0; ver_conv = 0;
+  } else if (s >= 60 && s <= 90) {
+    cat = '60–90'; req_rooms = 5;
+    if (total === 0) { acr = 2; part = 2; ver_conv = 1; }
+    else if (total === 1) { acr = 1; part = 2; ver_conv = 1; }
+    else if (total === 2) { acr = 0; part = 2; ver_conv = 1; }
+    else if (total === 3) { acr = 0; part = 2; ver_conv = 0; }
+    else if (total === 4) { acr = 0; part = 1; ver_conv = 0; }
+    else { acr = 0; part = 0; ver_conv = 0; }
+  } else if (s >= 91 && s <= 120) {
+    cat = '91–120'; req_rooms = 5;
+    if (total === 0) { acr = 3; part = 1; ver_conv = 1; }
+    else if (total === 1) { acr = 2; part = 1; ver_conv = 1; }
+    else if (total === 2) { acr = 1; part = 1; ver_conv = 1; }
+    else if (total === 3) { acr = 0; part = 1; ver_conv = 1; }
+    else if (total === 4) { acr = 0; part = 0; ver_conv = 1; }
+    else { acr = 0; part = 0; ver_conv = 0; }
+  } else if (s >= 121 && s <= 150) {
+    cat = '121–150'; req_rooms = 5;
+    if (total === 0) { acr = 4; part = 0; ver_conv = 1; }
+    else if (total === 1) { acr = 3; part = 0; ver_conv = 1; }
+    else if (total === 2) { acr = 2; part = 0; ver_conv = 1; }
+    else if (total === 3) { acr = 1; part = 0; ver_conv = 1; }
+    else if (total === 4) { acr = 0; part = 0; ver_conv = 1; }
+    else { acr = 0; part = 0; ver_conv = 0; }
+  } else if (s > 150) {
+    cat = '>150';
+    req_rooms = 5 + Math.ceil((s - 150) / 30);
+    acr = Math.max(0, req_rooms - total);
+    part = 0; ver_conv = 0;
+  }
+
+  // Verandah feasibility check
+  const ver_possible = Math.floor(ver_m / 6);
+  const ver_final = Math.min(ver_conv, ver_possible);
+
+  // Total rooms after all work
+  const total_rooms_after = total + acr + part + ver_final;
+
+  // 2. RO Systems: 1 per 60 students (approx)
+  const ro_req = Math.ceil(s / 60);
+  const ro_net = Math.max(0, ro_req - ro_ex);
+
+  // 3. Dual Desks: 1 desk per 2 students, deduct existing desks and rooms*seats
+  const dd_req = Math.ceil(s / 2);
+  const dd_room_covered = total_rooms_after * 20; // assume 20 desks per room already from procurement
+  const dd_net = Math.max(0, dd_req - dd_ex);
+
+  // 4. Green Chalk Boards: 1 per functional classroom
+  const gcb_req = total_rooms_after;
+  const gcb_net = Math.max(0, gcb_req - gcb_ex);
+
+  // 5. Toilets: boys + girls separate. Norm: 1 block per school + 1 per 50 girls
+  const toi_req = s > 0 ? Math.max(2, Math.ceil(s / 50)) : 0;
+  const toi_net = Math.max(0, toi_req - toi_ex);
+
+  // 6. Drinking Water: 1 point per 60 students
+  const dw_req = s > 0 ? Math.max(1, Math.ceil(s / 60)) : 0;
+  const dw_net = Math.max(0, dw_req - dw_ex);
+
+  // 7. Electrification: all rooms need fans & tube lights
+  const el_req = total_rooms_after;
+  const el_net = Math.max(0, el_req - el_ex);
+
+  // 8. Major/Minor Repair
+  const rep_net = rep_need;
+
+  // 9. Painting: whole school (binary — yes/no per school)
+  const paint = s > 0 ? 1 : 0;
+
+  // --- RENDER SUMMARY ---
+  const summaryData = [
+    { lbl: 'Strength Category', val: cat, flag: false, unit: '' },
+    { lbl: 'Available Rooms', val: total, flag: false, unit: '' },
+    { lbl: 'Required Rooms', val: req_rooms, flag: false, unit: '' },
+    { lbl: 'New ACRs Needed', val: acr, flag: acr > 0, unit: '' },
+    { lbl: 'Partitions', val: part, flag: part > 0, unit: '' },
+    { lbl: 'Verandah Conv.', val: ver_final, flag: ver_final > 0, unit: '' },
+  ];
+
+  let sumHTML = '';
+  summaryData.forEach(d => {
+    sumHTML += `<div class="stat${d.flag ? ' flag' : ''}"><div class="s-lbl">${d.lbl}</div><div class="s-val">${d.val}${d.unit}</div></div>`;
+  });
+  g('summary-grid').innerHTML = sumHTML;
+  g('summary-panel').style.display = 'block';
+
+  // --- RENDER COMPONENT CARDS ---
+  const comps = [
+    {
+      num: 1, title: 'Major & Minor Repairs', agency: 'SMC',
+      rows: [
+        { lbl: 'Rooms needing repair', val: rep_need },
+        { lbl: 'Net requirement', val: rep_net },
+      ],
+      note: rep_net > 0 ? `${rep_net} room(s) to be proposed after physical inspection & Mandal Committee verification.` : 'No repair works proposed.',
+      warn: rep_net > 0
+    },
+    {
+      num: 2, title: 'Verandah → Classroom Conversion', agency: 'SMC',
+      rows: [
+        { lbl: 'Conversions required (norm)', val: ver_conv },
+        { lbl: 'Verandah available (6m each)', val: ver_possible },
+        { lbl: 'Net conversions feasible', val: ver_final },
+      ],
+      note: ver_m === 0 ? 'Enter verandah length to check feasibility.' : ver_final < ver_conv ? `Only ${ver_final} of ${ver_conv} conversions feasible given ${ver_m}m verandah.` : `${ver_final} conversion(s) proposed.`,
+      warn: ver_final < ver_conv
+    },
+    {
+      num: 3, title: 'Electrification (Fans & Tube Lights)', agency: 'SMC',
+      rows: [
+        { lbl: 'Total rooms after work', val: total_rooms_after },
+        { lbl: 'Already electrified', val: el_ex },
+        { lbl: 'Net rooms to electrify', val: el_net },
+      ],
+      note: el_net > 0 ? `${el_net} room(s) need electrification with fans & tube lights.` : 'All rooms are electrified.',
+      warn: el_net > 0
+    },
+    {
+      num: 4, title: 'Toilets with Running Water', agency: 'SMC',
+      rows: [
+        { lbl: 'Required toilet blocks (norm)', val: toi_req },
+        { lbl: 'Existing toilets', val: toi_ex },
+        { lbl: 'Net blocks to construct', val: toi_net },
+      ],
+      note: toi_net > 0 ? `${toi_net} toilet block(s) to be constructed with running water facility.` : 'Toilet requirement met.',
+      warn: toi_net > 0
+    },
+    {
+      num: 5, title: 'Classroom Partitions', agency: 'APEWIDC',
+      rows: [
+        { lbl: 'Partitions required (norm)', val: part },
+      ],
+      note: part > 0 ? `${part} partition(s) to be taken up through APEWIDC.` : 'No partitions required for this strength range.',
+      warn: part > 0
+    },
+    {
+      num: 6, title: 'Painting Works', agency: 'APEWIDC',
+      rows: [
+        { lbl: 'School to be painted', val: paint === 1 ? 'Yes' : 'N/A' },
+      ],
+      note: paint ? 'Entire school building to be proposed for painting.' : 'No students enrolled.',
+      warn: false
+    },
+    {
+      num: 7, title: 'Drinking Water Facilities', agency: 'APEWIDC',
+      rows: [
+        { lbl: 'Required water points', val: dw_req },
+        { lbl: 'Existing water points', val: dw_ex },
+        { lbl: 'Net points needed', val: dw_net },
+      ],
+      note: dw_net > 0 ? `${dw_net} additional drinking water point(s) / RO unit(s) required.` : 'Drinking water requirement met.',
+      warn: dw_net > 0
+    },
+    {
+      num: 8, title: 'Green Chalk Boards', agency: 'APEWIDC',
+      rows: [
+        { lbl: 'Total classrooms (after work)', val: gcb_req },
+        { lbl: 'Existing usable boards', val: gcb_ex },
+        { lbl: 'Net boards required', val: gcb_net },
+      ],
+      note: gcb_net > 0 ? `${gcb_net} green chalk board(s) needed for classrooms.` : 'All classrooms have boards.',
+      warn: gcb_net > 0
+    },
+    {
+      num: 9, title: 'Dual Desks', agency: 'APEWIDC',
+      rows: [
+        { lbl: 'Desks required (strength/2)', val: dd_req },
+        { lbl: 'Existing usable desks', val: dd_ex },
+        { lbl: 'Net desks to procure', val: dd_net },
+      ],
+      note: dd_net > 0 ? `${dd_net} dual desk(s) to be proposed (1 desk per 2 students).` : 'Dual desk requirement met.',
+      warn: dd_net > 0
+    },
+    {
+      num: 10, title: 'Additional Class Rooms (ACRs)', agency: 'Collector',
+      rows: [
+        { lbl: 'Total rooms required', val: req_rooms },
+        { lbl: 'Existing rooms + ongoing', val: total },
+        { lbl: 'Net ACRs to construct', val: acr },
+      ],
+      note: acr > 0 ? `${acr} ACR(s) to be tendered through Collector's office.` : 'No new ACR required.',
+      warn: acr > 0
+    },
+  ];
+
+  const agencyBadge = a => a === 'SMC' ? 'badge-smc' : a === 'APEWIDC' ? 'badge-ap' : 'badge-col';
+
+  let compHTML = '';
+  comps.forEach(c => {
+    let rowsHTML = c.rows.map(r => {
+      const isZero = r.val === 0 || r.val === 'N/A';
+      return `<div class="comp-row"><span class="lbl">${r.lbl}</span><span class="val${isZero ? ' zero' : c.warn && r.lbl.toLowerCase().includes('net') ? ' flag' : ''}">${r.val}</span></div>`;
+    }).join('');
+    compHTML += `<div class="comp-card">
+      <div class="comp-head"><span>Component ${c.num}: ${c.title}</span><span class="badge ${agencyBadge(c.agency)}">${c.agency}</span></div>
+      <div class="comp-body">${rowsHTML}<div class="comp-note${c.warn ? ' warn' : ' good'}">${c.note}</div></div>
+    </div>`;
+  });
+  g('comp-grid').innerHTML = compHTML;
+  g('comp-panel').style.display = 'block';
+
+  // --- RENDER TABLE ---
+  const tableRows = [
+    { sl:1, name:'Major & Minor Repairs',             req: rep_need, ex: 0,      net: rep_net, agency:'SMC' },
+    { sl:2, name:'Verandah → Classroom Conversion',   req: ver_conv, ex: 0,      net: ver_final, agency:'SMC' },
+    { sl:3, name:'Electrification (Fans & Lights)',   req: el_req,   ex: el_ex,  net: el_net, agency:'SMC' },
+    { sl:4, name:'Toilets with Running Water',        req: toi_req,  ex: toi_ex, net: toi_net, agency:'SMC' },
+    { sl:5, name:'Classroom Partitions',              req: part,     ex: 0,      net: part, agency:'APEWIDC' },
+    { sl:6, name:'Painting Works',                    req: paint,    ex: 0,      net: paint, agency:'APEWIDC' },
+    { sl:7, name:'Drinking Water Facilities',         req: dw_req,   ex: dw_ex,  net: dw_net, agency:'APEWIDC' },
+    { sl:8, name:'Green Chalk Boards',                req: gcb_req,  ex: gcb_ex, net: gcb_net, agency:'APEWIDC' },
+    { sl:9, name:'Dual Desks',                        req: dd_req,   ex: dd_ex,  net: dd_net, agency:'APEWIDC' },
+    { sl:10,name:'Additional Class Rooms (ACRs)',     req: req_rooms,ex: total,  net: acr, agency:'Collector' },
+  ];
+
+  let tHTML = '';
+  tableRows.forEach(r => {
+    const nc = r.net > 0 ? 'num' : 'zero';
+    const ab = r.agency === 'SMC' ? 'badge-smc' : r.agency === 'APEWIDC' ? 'badge-ap' : 'badge-col';
+    tHTML += `<tr>
+      <td>${r.sl}</td>
+      <td>${r.name}</td>
+      <td style="text-align:right">${r.req}</td>
+      <td style="text-align:right">${r.ex}</td>
+      <td class="${nc}">${r.net}</td>
+      <td><span class="badge ${ab}">${r.agency}</span></td>
+    </tr>`;
+  });
+  g('est-tbody').innerHTML = tHTML;
+  g('table-panel').style.display = 'block';
+}
+</script>
